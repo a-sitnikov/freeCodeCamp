@@ -2,27 +2,22 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-auto-rows: minmax(100px, auto);
+  margin:0 auto;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.cell {
+  border: black 1px solid;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 98px;
+  font-size: 90px;
+  cursor: pointer;
 }
