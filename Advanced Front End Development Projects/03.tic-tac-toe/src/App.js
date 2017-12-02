@@ -1,6 +1,29 @@
 import React, { Component } from 'react';
 import './App.css';
 
+class EndGame extends Component {
+    
+  render() {
+    
+    let display = "none";
+    if (this.props.winner)
+      display = "";
+  
+    let winnerText;
+    if (this.props.winner === 'draw')  
+      winnerText = "Draw";
+    else 
+      winnerText = "Player " + this.props.winner + " win"; 
+      
+    return (
+      <div style={{display}} className={'endgame'}>
+      <p className={'winner'}>{winnerText}</p>
+      <button className={'newgame'} onClick={this.props.onClick}>Start new game</button>
+      </div>
+    );
+  }
+}
+
 class App extends Component {
 
   constructor(props) {
@@ -12,12 +35,28 @@ class App extends Component {
       board,
       user: 'X',
       bot: 'O',
-      turn: 'X'
+      turn: 'X',
+      winner: undefined
     }
 
     this.onCellClick = this.onCellClick.bind(this);
     this.doBotMove = this.doBotMove.bind(this);
     this.doMove = this.doMove.bind(this);
+    this.startNewGame = this.startNewGame.bind(this);
+
+  }
+
+  startNewGame() {
+
+    let board = Array(9).fill('');
+
+    this.setState({
+      board,
+      user: 'X',
+      bot: 'O',
+      turn: 'X',
+      winner: undefined
+    });
 
   }
 
@@ -50,7 +89,10 @@ class App extends Component {
         board[2] === board[6]) 
         return board[2];
 
-    return undefined;
+    if (board.indexOf('') === -1) 
+      return 'draw';
+    else    
+      return undefined;
   }
 
   async doMove(i, value) {
@@ -77,7 +119,9 @@ class App extends Component {
 
     if (move === undefined) return;
     let winner = await this.doMove(move, this.state.bot);
-    if (winner) console.log(winner);
+    if (winner)
+      this.setState({winner});
+    ;
   }
 
 
@@ -92,8 +136,7 @@ class App extends Component {
     if (!winner)
       setTimeout(() => this.doBotMove(), 300);
     else
-      console.log(winner);
-
+      this.setState({winner});
   }
 
   render() {
@@ -112,11 +155,16 @@ class App extends Component {
       );
     }
 
+    let endGame = "";
+    if (this.state.winner) 
+      endGame = <EndGame winner={this.state.winner} onClick={this.startNewGame}/>;
+
     return (
       <div className="App">
         <div className="board">
           {cells}
         </div>
+        {endGame}
       </div>
     );
   }

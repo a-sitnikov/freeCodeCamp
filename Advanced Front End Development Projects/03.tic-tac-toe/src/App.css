@@ -24,3 +24,25 @@
   cursor: pointer;
   border-radius: 5px;
 }
+
+.endgame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 310px;
+  height: 310px;  
+  z-index: 999;
+  opacity: 0.9;
+  background-color: white; 
+  text-align: center;
+}
+
+.winner {
+  font-size: 48px;
+}  
+
+.newgame {
+  font-size: 16px;
+  opacity: 1;
+}  
