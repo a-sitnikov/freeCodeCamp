@@ -6,6 +6,8 @@
   display: grid;
   grid-template-columns: repeat(3, 100px);
   grid-auto-rows: minmax(100px, auto);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
   margin:0 auto;
   position: absolute;
   left: 50%;
@@ -20,4 +22,5 @@
   line-height: 98px;
   font-size: 90px;
   cursor: pointer;
+  border-radius: 5px;
 }

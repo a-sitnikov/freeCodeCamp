@@ -11,13 +11,46 @@ class App extends Component {
     this.state = {
       board,
       user: 'X',
-      bot: 'O'
+      bot: 'O',
+      turn: 'X'
     }
 
     this.onCellClick = this.onCellClick.bind(this);
     this.doBotMove = this.doBotMove.bind(this);
     this.doMove = this.doMove.bind(this);
 
+  }
+
+  checkWinner(board) {
+
+    // rows
+    for (let i=0; i<3; i++) {
+      if (board[3*i] !== '' && 
+          board[3*i] === board[3*i + 1] && 
+          board[3*i] === board[3*i + 2]) 
+          return board[3*i];
+    }  
+    
+    // columns
+    for (let i=0; i<3; i++) {
+      if (board[i] !== '' && 
+          board[i] === board[i + 3] && 
+          board[i] === board[i + 6]) 
+          return board[i];
+    }  
+    
+    // diags
+    if (board[0] !== '' && 
+        board[0] === board[4] && 
+        board[0] === board[8]) 
+        return board[0];
+
+    if (board[2] !== '' && 
+        board[2] === board[4] && 
+        board[2] === board[6]) 
+        return board[2];
+
+    return undefined;
   }
 
   async doMove(i, value) {
@@ -27,13 +60,14 @@ class App extends Component {
       let board = this.state.board.slice();
       board[i] = value;
 
-      this.setState({ board }, resolve);
+      let winner = this.checkWinner(board);
+      this.setState({ board }, resolve(winner));
+
     })
   }
 
-  doBotMove() {
+  async doBotMove() {
 
-    console.log(this.state.board);
     let move = undefined;
     for (let i = 0; i < 9; i++)
       if (this.state.board[i] === '') {
@@ -42,17 +76,23 @@ class App extends Component {
       }
 
     if (move === undefined) return;
-    setTimeout(() => {this.doMove(move, this.state.bot)}, 300);
+    let winner = await this.doMove(move, this.state.bot);
+    if (winner) console.log(winner);
   }
 
 
   async onCellClick(i) {
 
+    if (this.state.turn !== this.state.user) return;
+    
     let value = this.state.board[i];
     if (value !== '') return;
 
-    await this.doMove(i, this.state.user);
-    this.doBotMove();
+    let winner = await this.doMove(i, this.state.user);
+    if (!winner)
+      setTimeout(() => this.doBotMove(), 300);
+    else
+      console.log(winner);
 
   }
 
